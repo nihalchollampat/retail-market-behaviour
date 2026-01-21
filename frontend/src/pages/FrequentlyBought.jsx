@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API } from "../services/api";
 import DashboardLayout from "../layouts/DashboardLayout.jsx";
+import "./FrequentlyBought.css";
 
 export default function AprioriDashboard() {
   const [data, setData] = useState(null);
@@ -34,7 +35,7 @@ export default function AprioriDashboard() {
   if (loading)
     return (
       <DashboardLayout>
-        <div className="min-h-screen flex items-center justify-center text-[var(--text-muted)]">
+        <div className="fb-loading">
           Loading Apriori Market Basket Analysis…
         </div>
       </DashboardLayout>
@@ -65,64 +66,64 @@ export default function AprioriDashboard() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 min-h-screen">
-        <div className="max-w-7xl mx-auto">
+      <div className="frequently-bought-page">
+        <div className="fb-container">
           {/* Header */}
-          <div className="mb-7">
-            <h1 className="text-3xl font-bold mb-2">
+          <div className="fb-header">
+            <h1 className="fb-title">
               Market Basket — Apriori / FP-Growth
             </h1>
-            <p className="text-md text-[var(--text-muted)]">
+            <p className="fb-subtitle">
               Frequent itemsets + association rules powered by FP-Growth
             </p>
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-7">
-            <div className="card-premium">
-              <div className="text-2xl font-bold text-[var(--accent-primary)]">
+          <div className="fb-stats-grid">
+            <div className="card-premium fb-card-padded">
+              <div className="fb-stat-value">
                 {sortedItemsets.length}
               </div>
-              <div className="text-sm text-[var(--text-muted)] mt-1">
+              <div className="fb-stat-label">
                 Frequent Itemsets
               </div>
             </div>
 
-            <div className="card-premium">
-              <div className="text-2xl font-bold text-[var(--accent-primary)]">
+            <div className="card-premium fb-card-padded">
+              <div className="fb-stat-value">
                 {sortedRules.length}
               </div>
-              <div className="text-sm text-[var(--text-muted)] mt-1">
+              <div className="fb-stat-label">
                 Association Rules
               </div>
             </div>
 
-            <div className="card-premium">
-              <div className="text-2xl font-bold text-[var(--accent-primary)]">
+            <div className="card-premium fb-card-padded">
+              <div className="fb-stat-value">
                 {data.meta.max_itemset_len}
               </div>
-              <div className="text-sm text-[var(--text-muted)] mt-1">
+              <div className="fb-stat-label">
                 Max Itemset Length
               </div>
             </div>
 
-            <div className="card-premium">
-              <div className="text-2xl font-bold text-[var(--accent-primary)]">
+            <div className="card-premium fb-card-padded">
+              <div className="fb-stat-value">
                 {data.meta.min_support}
               </div>
-              <div className="text-sm text-[var(--text-muted)] mt-1">Min Support</div>
+              <div className="fb-stat-label">Min Support</div>
             </div>
           </div>
 
           {/* Content */}
-          <div className="grid lg:grid-cols-3 gap-6">
+          <div className="fb-main-grid">
             {/* LEFT: Frequent Itemsets */}
-            <div className="lg:col-span-1">
-              <div className="card-premium p-5">
-                <h2 className="font-semibold mb-1">
+            <div className="fb-left-col">
+              <div className="card-premium fb-card-padded">
+                <h2 className="fb-card-title">
                   Frequent Itemsets
                 </h2>
-                <p className="text-sm text-[var(--text-muted)] mb-4">
+                <p className="fb-card-subtitle">
                   Select an itemset to see its rules
                 </p>
 
@@ -131,10 +132,10 @@ export default function AprioriDashboard() {
                   placeholder="Search itemset..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-2 border border-[var(--border-subtle)] bg-[var(--bg-secondary)] rounded-lg text-sm mb-4 focus:outline-none focus:border-[var(--accent-primary)] text-[var(--text-main)] placeholder:text-[var(--text-muted)]"
+                  className="fb-search-input"
                 />
 
-                <div className="space-y-1.5 max-h-96 overflow-y-auto pr-1">
+                <div className="fb-item-list">
                   {filteredItemsets.map((i, index) => {
                     const label = i.itemsets.join(", ");
                     const support = (i.support * 100).toFixed(2);
@@ -143,14 +144,11 @@ export default function AprioriDashboard() {
                       <button
                         key={index}
                         onClick={() => setSelectedItemset(i)}
-                        className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${selectedItemset === i
-                            ? "bg-[var(--accent-primary)] text-white font-medium shadow-sm"
-                            : "text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-main)]"
-                          }`}
+                        className={`fb-item-btn ${selectedItemset === i ? "active" : ""}`}
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="truncate">{label}</span>
-                          <span className="text-xs opacity-70 ml-2">
+                        <div className="fb-btn-content">
+                          <span className="fb-item-label">{label}</span>
+                          <span className="fb-item-val">
                             {support}%
                           </span>
                         </div>
@@ -162,22 +160,22 @@ export default function AprioriDashboard() {
             </div>
 
             {/* RIGHT: Rules */}
-            <div className="lg:col-span-2">
-              <div className="card-premium p-5">
-                <h2 className="font-semibold mb-1">
+            <div className="fb-right-col">
+              <div className="card-premium fb-card-padded">
+                <h2 className="fb-card-title">
                   Rules for:{" "}
                   {selectedItemset ? selectedItemset.itemsets.join(", ") : "—"}
                 </h2>
-                <p className="text-sm text-[var(--text-muted)] mb-5">
+                <p className="fb-card-subtitle">
                   {selectedRules.length} rules found
                 </p>
 
                 {selectedRules.length === 0 ? (
-                  <div className="text-center py-20 text-[var(--text-muted)]">
+                  <div className="fb-empty-rules">
                     <p>No rules available for this itemset</p>
                   </div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="fb-rules-container">
                     {selectedRules.map((rule, idx) => {
                       const lift = rule.lift.toFixed(2);
                       const confidence = (rule.confidence * 100).toFixed(1);
@@ -185,22 +183,22 @@ export default function AprioriDashboard() {
                       return (
                         <div
                           key={idx}
-                          className="rounded-lg p-4 border border-[var(--border-subtle)] bg-[var(--bg-secondary)] hover:border-[var(--accent-primary)] transition-all"
+                          className="fb-rule-card"
                         >
-                          <div className="mb-2">
-                            <h3 className="font-medium text-[var(--text-main)]">
+                          <div className="fb-rule-header">
+                            <h3 className="fb-rule-title">
                               {rule.antecedents.join(", ")} ➜{" "}
                               {rule.consequents.join(", ")}
                             </h3>
                           </div>
 
-                          <div className="text-sm text-[var(--text-muted)] mb-3">
+                          <div className="fb-rule-stats">
                             Lift: {lift} • Confidence: {confidence}%
                           </div>
 
-                          <div className="w-full bg-[var(--bg-main)] h-2 rounded-full overflow-hidden">
+                          <div className="fb-progress-bg">
                             <div
-                              className="h-2 bg-[var(--accent-primary)] rounded-full"
+                              className="fb-progress-fill"
                               style={{ width: `${confidence}%` }}
                             />
                           </div>
@@ -214,16 +212,16 @@ export default function AprioriDashboard() {
           </div>
 
           {/* API Preview */}
-          <div className="mt-8 card-premium p-5">
-            <h3 className="font-semibold mb-1">
+          <div className="fb-api-preview card-premium">
+            <h3 className="fb-card-title">
               API Response Preview
             </h3>
-            <p className="text-sm text-[var(--text-muted)] mb-3">
+            <p className="fb-card-subtitle">
               Showing first 2 sorted itemsets + first 2 sorted rules
             </p>
 
-            <div className="bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-lg p-4 overflow-x-auto">
-              <pre className="text-xs text-green-400 font-mono">
+            <div className="fb-code-box">
+              <pre className="fb-code">
                 {JSON.stringify(
                   {
                     itemsets: sortedItemsets.slice(0, 2),

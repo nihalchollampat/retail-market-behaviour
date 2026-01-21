@@ -1,0 +1,15 @@
+.outlier-page {
+    padding: 1.5rem;
+}
+
+.outlier-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.outlier-desc {
+    color: var(--text-muted);
+}

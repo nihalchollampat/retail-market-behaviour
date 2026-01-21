@@ -11,6 +11,7 @@ import {
   Cell,
 } from "recharts";
 import DashboardLayout from "../layouts/DashboardLayout.jsx";
+import "./BehaviorMap.css";
 
 export default function BehaviorMap() {
   const [data, setData] = useState(null);
@@ -37,12 +38,12 @@ export default function BehaviorMap() {
     if (active && payload && payload.length) {
       const dataPoint = payload[0].payload;
       return (
-        <div className="bg-[var(--bg-card)] border border-[var(--border-subtle)] p-3 rounded-lg shadow-lg">
-          <p className="font-bold text-[var(--accent-primary)] mb-1">Customer #{dataPoint.customer_id}</p>
-          <div className="space-y-1 text-xs text-[var(--text-muted)]">
-            <p>Total Spend: <span className="font-semibold text-[var(--text-main)]">${dataPoint.total_spend}</span></p>
-            <p>Orders: <span className="font-semibold text-[var(--text-main)]">{dataPoint.total_orders}</span></p>
-            <p>Items: <span className="font-semibold text-[var(--text-main)]">{dataPoint.total_items}</span></p>
+        <div className="bm-tooltip">
+          <p className="bm-tooltip-title">Customer #{dataPoint.customer_id}</p>
+          <div className="bm-tooltip-content">
+            <p>Total Spend: <span className="bm-tooltip-val">${dataPoint.total_spend}</span></p>
+            <p>Orders: <span className="bm-tooltip-val">{dataPoint.total_orders}</span></p>
+            <p>Items: <span className="bm-tooltip-val">{dataPoint.total_items}</span></p>
           </div>
         </div>
       );
@@ -52,63 +53,63 @@ export default function BehaviorMap() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen p-6">
+      <div className="behavior-map-page">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+        <div className="bm-header">
+          <h1 className="bm-title">
             Customer Behavior Map
           </h1>
-          <p className="text-[var(--text-muted)] mb-1">
+          <p className="bm-subtitle">
             Visualizing customer similarities using PCA (Principal Component Analysis).
           </p>
-          <p className="text-sm text-[var(--text-muted)] opacity-80">
+          <p className="bm-desc">
             Customers closer together exhibit similar purchasing behaviors
           </p>
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-[var(--text-muted)]">Loading visualization...</div>
+          <div className="bm-loading">
+            <div>Loading visualization...</div>
           </div>
         ) : (
           <>
             {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="card-premium">
-                <p className="text-sm text-[var(--text-muted)] mb-1">Explained Variance (PC1)</p>
-                <p className="text-3xl font-bold text-[var(--accent-primary)]">
+            <div className="bm-stats-grid">
+              <div className="card-premium bm-stat-card">
+                <p className="bm-stat-label">Explained Variance (PC1)</p>
+                <p className="bm-stat-value">
                   {(data?.explained_variance[0] * 100).toFixed(1)}%
                 </p>
-                <p className="text-xs text-[var(--text-muted)] mt-1">Primary behavior factor</p>
+                <p className="bm-stat-desc">Primary behavior factor</p>
               </div>
-              <div className="card-premium">
-                <p className="text-sm text-[var(--text-muted)] mb-1">Explained Variance (PC2)</p>
-                <p className="text-3xl font-bold text-[var(--accent-primary)]">
+              <div className="card-premium bm-stat-card">
+                <p className="bm-stat-label">Explained Variance (PC2)</p>
+                <p className="bm-stat-value">
                   {(data?.explained_variance[1] * 100).toFixed(1)}%
                 </p>
-                <p className="text-xs text-[var(--text-muted)] mt-1">Secondary behavior factor</p>
+                <p className="bm-stat-desc">Secondary behavior factor</p>
               </div>
-              <div className="card-premium">
-                <p className="text-sm text-[var(--text-muted)] mb-1">Total Customers</p>
-                <p className="text-3xl font-bold text-[var(--accent-primary)]">
+              <div className="card-premium bm-stat-card">
+                <p className="bm-stat-label">Total Customers</p>
+                <p className="bm-stat-value">
                   {data?.data.length}
                 </p>
-                <p className="text-xs text-[var(--text-muted)] mt-1">Analyzed in 2D space</p>
+                <p className="bm-stat-desc">Analyzed in 2D space</p>
               </div>
             </div>
 
             {/* Scatter Chart */}
-            <div className="card-premium mb-8">
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold">
+            <div className="card-premium bm-chart-card">
+              <div className="bm-chart-header">
+                <h2 className="bm-chart-title">
                   Behavioral Clusters
                 </h2>
-                <p className="text-sm text-[var(--text-muted)]">
+                <p className="bm-chart-subtitle">
                   2D projection of multidimensional purchase data
                 </p>
               </div>
 
-              <div className="h-[500px] w-full">
+              <div className="bm-chart-container">
                 <ResponsiveContainer width="100%" height="100%">
                   <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
@@ -142,21 +143,21 @@ export default function BehaviorMap() {
             </div>
 
             {/* API Response Preview */}
-            <div className="card-premium">
+            <div className="card-premium bm-api-preview">
               <div className="mb-3">
-                <h2 className="text-lg font-semibold mb-1">
+                <h2 className="bm-chart-title">
                   API Response Data
                 </h2>
-                <p className="text-sm text-[var(--text-muted)]">
+                <p className="bm-chart-subtitle">
                   Raw JSON output from PCA analysis
                 </p>
               </div>
-              <div className="rounded-md border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-4 overflow-x-auto max-h-96">
-                <pre className="text-sm text-green-400 font-mono">
+              <div className="bm-code-box">
+                <pre className="bm-code">
                   {JSON.stringify(data, null, 2)}
                 </pre>
               </div>
-              <p className="text-xs text-[var(--text-muted)] mt-2">
+              <p className="bm-stat-desc">
                 Showing explained variance and projected coordinates
               </p>
             </div>

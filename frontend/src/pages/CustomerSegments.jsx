@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import DashboardLayout from "../layouts/DashboardLayout.jsx";
+import "./CustomerSegments.css";
 
 const COLORS = ["#6366f1", "#8b5cf6", "#a78bfa", "#c4b5fd", "#4f46e5", "#7c3aed"];
 
@@ -42,39 +43,39 @@ export default function CustomerSegments() {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen p-6">
+      <div className="customer-segments-page">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+        <div className="cs-header">
+          <h1 className="cs-title">
             Customer Segmentation
           </h1>
-          <p className="text-[var(--text-muted)] mb-1">
+          <p className="cs-subtitle">
             Group customers based on purchasing behavior using K-Means.
           </p>
-          <p className="text-sm text-[var(--text-muted)] opacity-80">
+          <p className="cs-description">
             Identify behavioral archetypes for targeted marketing
           </p>
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-[var(--text-muted)]">Loading segments...</div>
+          <div className="cs-loading">
+            <div className="cs-loading-text">Loading segments...</div>
           </div>
         ) : (
           <>
             {/* Overview Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div className="cs-grid">
               {/* Trend Chart */}
-              <div className="lg:col-span-2 card-premium">
-                <div className="mb-4">
-                  <h2 className="text-lg font-semibold mb-1">
+              <div className="cs-trend-chart card-premium">
+                <div className="cs-card-header">
+                  <h2 className="cs-card-title">
                     Spending Trends
                   </h2>
-                  <p className="text-sm text-[var(--text-muted)]">
+                  <p className="cs-card-subtitle">
                     Average spending behavior over the last 6 months
                   </p>
                 </div>
-                <div className="h-72">
+                <div className="cs-chart-container">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={trendData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-subtle)" />
@@ -113,82 +114,82 @@ export default function CustomerSegments() {
               </div>
 
               {/* Stats Cards */}
-              <div className="space-y-4">
-                <div className="card-premium bg-[var(--bg-card)] border-[var(--border-subtle)]">
-                  <p className="text-sm text-[var(--text-muted)] mb-1">Total Customers</p>
-                  <p className="text-3xl font-bold text-[var(--accent-primary)]">
+              <div className="cs-stats-column">
+                <div className="cs-stat-card card-premium">
+                  <p className="cs-stat-label">Total Customers</p>
+                  <p className="cs-stat-value">
                     {totalCustomers.toLocaleString()}
                   </p>
-                  <p className="text-xs text-[var(--text-muted)] mt-1">Across all segments</p>
+                  <p className="cs-stat-desc">Across all segments</p>
                 </div>
 
-                <div className="card-premium bg-[var(--bg-card)] border-[var(--border-subtle)]">
-                  <p className="text-sm text-[var(--text-muted)] mb-1">Active Clusters</p>
-                  <p className="text-3xl font-bold text-[var(--accent-primary)]">{segments.length}</p>
-                  <p className="text-xs text-[var(--text-muted)] mt-1">Distinct behavioral groups</p>
+                <div className="cs-stat-card card-premium">
+                  <p className="cs-stat-label">Active Clusters</p>
+                  <p className="cs-stat-value">{segments.length}</p>
+                  <p className="cs-stat-desc">Distinct behavioral groups</p>
                 </div>
 
-                <div className="card-premium bg-[var(--bg-card)] border-[var(--border-subtle)]">
-                  <p className="text-sm text-[var(--text-muted)] mb-1">Highest Avg Spend</p>
-                  <p className="text-3xl font-bold text-[var(--accent-primary)]">
+                <div className="cs-stat-card card-premium">
+                  <p className="cs-stat-label">Highest Avg Spend</p>
+                  <p className="cs-stat-value">
                     ${maxSpend.toLocaleString('en-US', { maximumFractionDigits: 0 })}
                   </p>
-                  <p className="text-xs text-[var(--text-muted)] mt-1">Per customer in top cluster</p>
+                  <p className="cs-stat-desc">Per customer in top cluster</p>
                 </div>
               </div>
             </div>
 
             {/* Cluster List */}
-            <div className="mb-5">
-              <h2 className="text-lg font-semibold mb-1">
+            <div className="cs-section-header">
+              <h2 className="cs-card-title">
                 Cluster Details
               </h2>
-              <p className="text-sm text-[var(--text-muted)]">
+              <p className="cs-card-subtitle">
                 Detailed metrics for each customer segment
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="cs-clusters-grid">
               {segments.map((seg, idx) => {
                 const spendRatio = parseFloat(seg.avg_spend) / maxSpend;
-                const barColor = spendRatio > 0.6 ? "bg-indigo-500" : spendRatio > 0.3 ? "bg-blue-400" : "bg-gray-600";
+                const barColorClass = spendRatio > 0.6 ? "bg-indigo-500" : spendRatio > 0.3 ? "bg-blue-400" : "bg-gray-600";
 
                 return (
                   <div
                     key={seg.cluster_id}
                     className="card-premium"
                   >
-                    <div className="flex justify-between items-start mb-3">
-                      <span className="text-xs text-[var(--text-muted)] uppercase tracking-wide">
+                    <div className="cs-cluster-header">
+                      <span className="cs-cluster-label">
                         Segment
                       </span>
-                      <span className="text-xs font-medium px-2 py-1 rounded-md border border-[var(--border-subtle)] text-[var(--text-main)] bg-[var(--bg-secondary)]">
+                      <span className="cs-cluster-badge">
                         Cluster {seg.cluster_id}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="cs-cluster-metrics">
                       <div>
-                        <p className="text-xs text-[var(--text-muted)] mb-0.5">Avg Spend</p>
-                        <p className="font-bold text-lg">${parseFloat(seg.avg_spend).toFixed(2)}</p>
+                        <p className="cs-metric-label">Avg Spend</p>
+                        <p className="cs-metric-value">${parseFloat(seg.avg_spend).toFixed(2)}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-[var(--text-muted)] mb-0.5">Customers</p>
-                        <p className="font-bold text-lg">{seg.customers}</p>
+                        <p className="cs-metric-label">Customers</p>
+                        <p className="cs-metric-value">{seg.customers}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-[var(--text-muted)] mb-0.5">Avg Orders</p>
-                        <p className="font-bold text-lg">{parseFloat(seg.avg_orders).toFixed(1)}</p>
+                        <p className="cs-metric-label">Avg Orders</p>
+                        <p className="cs-metric-value">{parseFloat(seg.avg_orders).toFixed(1)}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-[var(--text-muted)] mb-0.5">Avg Items</p>
-                        <p className="font-bold text-lg">{parseFloat(seg.avg_items).toFixed(1)}</p>
+                        <p className="cs-metric-label">Avg Items</p>
+                        <p className="cs-metric-value">{parseFloat(seg.avg_items).toFixed(1)}</p>
                       </div>
                     </div>
 
-                    <div className="w-full bg-[var(--bg-secondary)] h-1.5 rounded-full overflow-hidden">
+                    <div className="cs-progress-bg">
                       <div
-                        className={`h-1.5 rounded-full ${barColor}`}
+                        className={`cs-progress-bar ${barColorClass}`}
                         style={{ width: `${spendRatio * 100}%` }}
                       />
                     </div>
@@ -198,21 +199,21 @@ export default function CustomerSegments() {
             </div>
 
             {/* API Response Preview */}
-            <div className="mt-10 card-premium">
-              <div className="mb-3">
-                <h2 className="text-lg font-semibold mb-1">
+            <div className="cs-api-preview card-premium">
+              <div className="cs-card-header">
+                <h2 className="cs-card-title">
                   API Response Data
                 </h2>
-                <p className="text-sm text-[var(--text-muted)]">
+                <p className="cs-card-subtitle">
                   Raw JSON data from the segmentation model
                 </p>
               </div>
-              <div className="rounded-md border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-4 overflow-x-auto">
-                <pre className="text-sm text-green-400 font-mono">
+              <div className="cs-code-block">
+                <pre className="cs-code-content">
                   {JSON.stringify(segments, null, 2)}
                 </pre>
               </div>
-              <p className="text-xs text-[var(--text-muted)] mt-2">
+              <p className="cs-stat-desc">
                 Total: {segments.length} clusters
               </p>
             </div>

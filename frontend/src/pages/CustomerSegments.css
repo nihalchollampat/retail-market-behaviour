@@ -1,0 +1,216 @@
+.customer-segments-page {
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.cs-header {
+  margin-bottom: 2rem;
+}
+
+.cs-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.cs-subtitle {
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.cs-description {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.cs-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16rem;
+}
+
+.cs-loading-text {
+  color: var(--text-muted);
+}
+
+.cs-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .cs-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cs-trend-chart {
+  grid-column: span 1 / span 1;
+}
+
+@media (min-width: 1024px) {
+  .cs-trend-chart {
+    grid-column: span 2 / span 2;
+  }
+}
+
+.cs-card-header {
+  margin-bottom: 1rem;
+}
+
+.cs-card-title {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.cs-card-subtitle {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-muted);
+}
+
+.cs-chart-container {
+  height: 18rem;
+}
+
+.cs-stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cs-stat-card {
+  /* Using card-premium styles from global or re-defining if needed, 
+     but assuming card-premium is globally available. 
+     If we want pure HTML/CSS we should probably explicitly include it or rely on App.css */
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+}
+
+.cs-stat-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.cs-stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.cs-stat-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.cs-section-header {
+  margin-bottom: 1.25rem;
+}
+
+.cs-clusters-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .cs-clusters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cs-clusters-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cs-cluster-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.cs-cluster-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.cs-cluster-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  background-color: var(--bg-secondary);
+}
+
+.cs-cluster-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cs-metric-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.125rem;
+}
+
+.cs-metric-value {
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.cs-progress-bg {
+  width: 100%;
+  background-color: var(--bg-secondary);
+  height: 0.375rem;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.cs-progress-bar {
+  height: 0.375rem;
+  border-radius: 9999px;
+}
+
+/* Colors for progress bars */
+.bg-indigo-500 { background-color: #6366f1; }
+.bg-blue-400 { background-color: #60a5fa; }
+.bg-gray-600 { background-color: #4b5563; }
+.text-green-400 { color: #4ade80; }
+
+.cs-api-preview {
+  margin-top: 2.5rem;
+}
+
+.cs-code-block {
+  border-radius: 0.375rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-secondary);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.cs-code-content {
+  font-size: 0.875rem;
+  font-family: monospace;
+  color: #4ade80; 
+}

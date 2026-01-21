@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import DashboardLayout from "../layouts/DashboardLayout.jsx";
+import "./SpendPrediction.css";
 
 const PAGE_SIZE = 12;
 const COLORS = ["#6366f1", "#8b5cf6", "#a78bfa", "#c4b5fd", "#4f46e5", "#7c3aed"];
@@ -66,36 +67,36 @@ export default function SpendPredictionDashboard({ sidebarWidth = 64 }) {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen p-6">
+      <div className="spend-prediction-page">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+        <div className="sp-header">
+          <h1 className="sp-title">
             Customer Spend Predictions
           </h1>
-          <p className="text-md text-[var(--text-muted)]">
+          <p className="sp-subtitle">
             Using Decision Tree analysis on past purchase behavior
           </p>
         </div>
 
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-[var(--text-muted)]">Loading predictions...</div>
+          <div className="sp-loading">
+            <div>Loading predictions...</div>
           </div>
         ) : (
           <>
             {/* Overview Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div className="sp-overview-grid">
               {/* Pie Chart */}
-              <div className="lg:col-span-2 card-premium">
+              <div className="sp-chart-col card-premium sp-card-padded">
                 <div className="mb-4">
-                  <h2 className="text-lg font-semibold mb-1">
+                  <h2 className="sp-card-title">
                     Top 6 Customers
                   </h2>
-                  <p className="text-sm text-[var(--text-muted)]">
+                  <p className="sp-card-subtitle">
                     Your biggest spenders at a glance
                   </p>
                 </div>
-                <div className="h-72">
+                <div className="sp-chart-container">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -130,81 +131,81 @@ export default function SpendPredictionDashboard({ sidebarWidth = 64 }) {
               </div>
 
               {/* Stats Cards */}
-              <div className="space-y-4">
-                <div className="card-premium">
-                  <p className="text-sm text-[var(--text-muted)] mb-1">Total Expected Revenue</p>
-                  <p className="text-3xl font-bold text-[var(--accent-primary)]">
+              <div className="sp-stats-col">
+                <div className="card-premium sp-card-padded">
+                  <p className="sp-stat-label">Total Expected Revenue</p>
+                  <p className="sp-stat-value">
                     ${totalPredictedSpend.toLocaleString('en-US', { maximumFractionDigits: 0 })}
                   </p>
-                  <p className="text-xs text-[var(--text-muted)] mt-1">From all customers combined</p>
+                  <p className="sp-stat-desc">From all customers combined</p>
                 </div>
 
-                <div className="card-premium">
-                  <p className="text-sm text-[var(--text-muted)] mb-1">Total Customers</p>
-                  <p className="text-3xl font-bold text-[var(--accent-primary)]">{data.length}</p>
-                  <p className="text-xs text-[var(--text-muted)] mt-1">Active in your base</p>
+                <div className="card-premium sp-card-padded">
+                  <p className="sp-stat-label">Total Customers</p>
+                  <p className="sp-stat-value">{data.length}</p>
+                  <p className="sp-stat-desc">Active in your base</p>
                 </div>
 
-                <div className="card-premium">
-                  <p className="text-sm text-[var(--text-muted)] mb-1">Average per Customer</p>
-                  <p className="text-3xl font-bold text-[var(--accent-primary)]">
+                <div className="card-premium sp-card-padded">
+                  <p className="sp-stat-label">Average per Customer</p>
+                  <p className="sp-stat-value">
                     ${(totalPredictedSpend / data.length).toLocaleString('en-US', { maximumFractionDigits: 0 })}
                   </p>
-                  <p className="text-xs text-[var(--text-muted)] mt-1">Typical spend amount</p>
+                  <p className="sp-stat-desc">Typical spend amount</p>
                 </div>
               </div>
             </div>
 
             {/* Customer List */}
-            <div className="mb-5">
-              <h2 className="text-lg font-semibold mb-1">
+            <div className="sp-list-header">
+              <h2 className="sp-card-title">
                 All Customers
               </h2>
-              <p className="text-sm text-[var(--text-muted)]">
+              <p className="sp-card-subtitle">
                 Sorted by expected spending, highest first
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="sp-list-grid">
               {paginatedData.map((item, idx) => {
                 const spendLevel = item.predicted_spend >= highThreshold ? "High value" :
                   item.predicted_spend >= mediumThreshold ? "Medium" : "Low";
-                // Colors for badges
-                const levelColor = item.predicted_spend >= highThreshold ? "text-indigo-400 bg-indigo-500/10 border-indigo-500/30" :
-                  item.predicted_spend >= mediumThreshold ? "text-blue-400 bg-blue-500/10 border-blue-500/30" :
-                    "text-gray-400 bg-gray-500/10 border-gray-500/30";
 
-                const barColor = item.predicted_spend >= highThreshold ? "bg-indigo-500" :
-                  item.predicted_spend >= mediumThreshold ? "bg-blue-400" : "bg-gray-600";
+                const badgeClass = item.predicted_spend >= highThreshold ? "sp-badge-high" :
+                  item.predicted_spend >= mediumThreshold ? "sp-badge-med" :
+                    "sp-badge-low";
+
+                const barColorClass = item.predicted_spend >= highThreshold ? "bar-indigo" :
+                  item.predicted_spend >= mediumThreshold ? "bar-blue" : "bar-gray";
 
                 return (
                   <div
                     key={idx}
-                    className="card-premium"
+                    className="card-premium sp-customer-card"
                   >
-                    <div className="flex justify-between items-start mb-3">
-                      <span className="text-xs text-[var(--text-muted)] uppercase tracking-wide">
+                    <div className="sp-customer-header">
+                      <span className="sp-customer-label">
                         Customer
                       </span>
-                      <span className={`text-xs font-medium px-2 py-1 rounded-md border ${levelColor}`}>
+                      <span className={`sp-badge ${badgeClass}`}>
                         {spendLevel}
                       </span>
                     </div>
 
-                    <p className="font-semibold text-base mb-3 text-ellipsis overflow-hidden">{item.CustomerID}</p>
+                    <p className="sp-id-text">{item.CustomerID}</p>
 
-                    <div className="mb-3">
-                      <p className="text-xs text-[var(--text-muted)] mb-1">
+                    <div className="sp-spend-block">
+                      <p className="sp-spend-label">
                         Expected to spend
                       </p>
-                      <p className="font-bold text-xl text-[var(--text-main)]">
+                      <p className="sp-spend-amount">
                         ${item.predicted_spend.toLocaleString('en-US', { maximumFractionDigits: 0 })}
                       </p>
                     </div>
 
-                    <div className="w-full bg-[var(--bg-secondary)] h-1.5 rounded-full overflow-hidden">
+                    <div className="sp-progress-bg">
                       <div
-                        className={`h-1.5 rounded-full ${barColor}`}
+                        className={`sp-progress-fill ${barColorClass}`}
                         style={{ width: `${(item.predicted_spend / maxSpend) * 100}%` }}
                       />
                     </div>
@@ -214,29 +215,26 @@ export default function SpendPredictionDashboard({ sidebarWidth = 64 }) {
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center items-center mt-8 gap-2">
+            <div className="sp-pagination">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 rounded-md bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:bg-[var(--bg-secondary)] disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium text-[var(--text-main)]"
+                className="sp-btn-nav"
               >
                 Previous
               </button>
 
-              <div className="flex gap-2">
+              <div className="sp-pages-group">
                 {getPagination().map((p, idx) =>
                   p === "..." ? (
-                    <span key={idx} className="px-2 py-2 text-[var(--text-muted)]">
+                    <span key={idx} className="sp-page-ellipsis">
                       ...
                     </span>
                   ) : (
                     <button
                       key={idx}
                       onClick={() => setCurrentPage(p)}
-                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${currentPage === p
-                          ? "bg-[var(--accent-primary)] text-white"
-                          : "bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-main)] hover:bg-[var(--bg-secondary)]"
-                        }`}
+                      className={`sp-page-btn ${currentPage === p ? "active" : "inactive"}`}
                     >
                       {p}
                     </button>
@@ -247,32 +245,32 @@ export default function SpendPredictionDashboard({ sidebarWidth = 64 }) {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 rounded-md bg-[var(--bg-card)] border border-[var(--border-subtle)] hover:bg-[var(--bg-secondary)] disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium text-[var(--text-main)]"
+                className="sp-btn-nav"
               >
                 Next
               </button>
             </div>
 
-            <div className="text-center mt-3 text-sm text-[var(--text-muted)]">
+            <div className="sp-page-info">
               Page {currentPage} of {totalPages}
             </div>
 
             {/* API Response Preview */}
-            <div className="mt-10 card-premium">
+            <div className="sp-api-preview card-premium">
               <div className="mb-3">
-                <h2 className="text-lg font-semibold mb-1">
+                <h2 className="sp-card-title">
                   API Response Data
                 </h2>
-                <p className="text-sm text-[var(--text-muted)]">
+                <p className="sp-card-subtitle">
                   Raw JSON data from the prediction model
                 </p>
               </div>
-              <div className=" rounded-md border border-[var(--border-subtle)] bg-[var(--bg-secondary)] p-4 overflow-x-auto">
-                <pre className="text-sm text-green-400 font-mono">
+              <div className="sp-code-box">
+                <pre className="sp-code">
                   {JSON.stringify(data.slice(0, 5), null, 2)}
                 </pre>
               </div>
-              <p className="text-xs text-[var(--text-muted)] mt-2">
+              <p className="sp-stat-desc">
                 Showing first 5 records • Total: {data.length} customers
               </p>
             </div>
